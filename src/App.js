@@ -26,6 +26,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
 
+// Create a dark theme
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
@@ -40,6 +41,7 @@ function App() {
         update();
     }, []);
 
+    // Function to add a new task
     function getAnUpdate() {
         console.log('Updating list...');
         const tit = document.getElementById('title').value;
@@ -60,6 +62,7 @@ function App() {
         }
     }
 
+    // Function to initialize or update the task list
     function update() {
         console.log('Updating list...');
 
@@ -72,6 +75,7 @@ function App() {
         }
     }
 
+    // Function to delete a task
     function deleted(itemIndex) {
         console.log('Delete', itemIndex);
         const itemJsonArrayStr = localStorage.getItem('itemJson');
@@ -81,6 +85,7 @@ function App() {
         update();
     }
 
+    // Function to clear the task list
     function clearStr() {
         if (window.confirm('Do you really want to clear?')) {
             console.log('Clearing the contents...');
@@ -89,6 +94,7 @@ function App() {
         }
     }
 
+    // Function to toggle the completed status of a task
     function toggleCompleted(index) {
         const updatedArray = itemJsonArray.map((item, i) => {
             if (i === index) {
@@ -103,6 +109,7 @@ function App() {
         }
     }
 
+    // Function to render the task list based on the selected filter
     function renderTasks() {
         return itemJsonArray
             .filter(item => {
@@ -141,6 +148,7 @@ function App() {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <Box>
+                {/* AppBar */}
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="h6">
@@ -149,9 +157,11 @@ function App() {
                     </Toolbar>
                 </AppBar>
                 <Container maxWidth="md" style={{ marginTop: '2rem' }}>
+                    {/* App Title */}
                     <Typography variant="h4" align="center" gutterBottom>
                         TODO's List
                     </Typography>
+                    {/* Task Input */}
                     <Paper elevation={3} style={{ padding: '1rem' }}>
                         <TextField
                             id="title"
@@ -169,6 +179,7 @@ function App() {
                             variant="outlined"
                             style={{ marginBottom: '1rem' }}
                         />
+                        {/* Add and Clear Buttons */}
                         <Button
                             variant="contained"
                             color="primary"
@@ -186,6 +197,7 @@ function App() {
                         </Button>
                     </Paper>
                     <Box marginTop="2rem">
+                        {/* Filter Buttons */}
                         <Typography variant="h5">Your Items</Typography>
                         <ButtonGroup
                             variant="text"
@@ -202,6 +214,7 @@ function App() {
                                 <ToggleButton value="completed">Completed</ToggleButton>
                             </ToggleButtonGroup>
                         </ButtonGroup>
+                        {/* Task List */}
                         {itemJsonArray.length === 0 ? (
                             <Alert severity="info" style={{ marginTop: '1rem' }}>
                                 No items added yet.
