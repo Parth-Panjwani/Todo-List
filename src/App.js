@@ -26,7 +26,6 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert } from '@mui/material';
 
-// Create a dark theme
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
@@ -35,19 +34,18 @@ const darkTheme = createTheme({
 
 function App() {
     const [itemJsonArray, setItemJsonArray] = useState([]);
-    const [filter, setFilter] = useState('all');
+    const [taskStatus, setTaskStatus] = useState('all'); // Renamed filter to taskStatus
 
     useEffect(() => {
+        document.title = 'To-Do List';
         update();
     }, []);
 
-    // Function to add a new task
     function getAnUpdate() {
-        console.log('Updating list...');
         const tit = document.getElementById('title').value;
         const desc = document.getElementById('description').value;
 
-        const newItem = [tit, desc, false]; // [title, description, completed]
+        const newItem = [tit, desc, false];
 
         if (localStorage.getItem('itemJson') === null) {
             const newArray = [newItem];
@@ -62,10 +60,7 @@ function App() {
         }
     }
 
-    // Function to initialize or update the task list
     function update() {
-        console.log('Updating list...');
-
         if (localStorage.getItem('itemJson') === null) {
             setItemJsonArray([]);
         } else {
@@ -75,9 +70,7 @@ function App() {
         }
     }
 
-    // Function to delete a task
     function deleted(itemIndex) {
-        console.log('Delete', itemIndex);
         const itemJsonArrayStr = localStorage.getItem('itemJson');
         let itemArray = JSON.parse(itemJsonArrayStr);
         itemArray.splice(itemIndex, 1);
@@ -85,38 +78,34 @@ function App() {
         update();
     }
 
-    // Function to clear the task list
     function clearStr() {
         if (window.confirm('Do you really want to clear?')) {
-            console.log('Clearing the contents...');
             localStorage.clear();
             update();
         }
     }
 
-    // Function to toggle the completed status of a task
     function toggleCompleted(index) {
         const updatedArray = itemJsonArray.map((item, i) => {
             if (i === index) {
-                return [item[0], item[1], !item[2]]; // Toggle the completed status
+                return [item[0], item[1], !item[2]];
             }
             return item;
         });
         localStorage.setItem('itemJson', JSON.stringify(updatedArray));
         setItemJsonArray(updatedArray);
-        if (filter === 'all') {
+        if (taskStatus === 'all') {
             update();
         }
     }
 
-    // Function to render the task list based on the selected filter
     function renderTasks() {
         return itemJsonArray
             .filter(item => {
-                if (filter === 'active') {
-                    return !item[2]; // Active items have completed status false
-                } else if (filter === 'completed') {
-                    return item[2]; // Completed items have completed status true
+                if (taskStatus === 'active') { // Renamed filter to taskStatus
+                    return !item[2];
+                } else if (taskStatus === 'completed') { // Renamed filter to taskStatus
+                    return item[2];
                 }
                 return true; // 'all' filter
             })
@@ -148,20 +137,17 @@ function App() {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <Box>
-                {/* AppBar */}
                 <AppBar position="static">
                     <Toolbar>
                         <Typography variant="h6">
-                            TODO's List
+                            To-Do List
                         </Typography>
                     </Toolbar>
                 </AppBar>
                 <Container maxWidth="md" style={{ marginTop: '2rem' }}>
-                    {/* App Title */}
                     <Typography variant="h4" align="center" gutterBottom>
-                        TODO's List
+                        To-Do List
                     </Typography>
-                    {/* Task Input */}
                     <Paper elevation={3} style={{ padding: '1rem' }}>
                         <TextField
                             id="title"
@@ -179,7 +165,6 @@ function App() {
                             variant="outlined"
                             style={{ marginBottom: '1rem' }}
                         />
-                        {/* Add and Clear Buttons */}
                         <Button
                             variant="contained"
                             color="primary"
@@ -197,7 +182,6 @@ function App() {
                         </Button>
                     </Paper>
                     <Box marginTop="2rem">
-                        {/* Filter Buttons */}
                         <Typography variant="h5">Your Items</Typography>
                         <ButtonGroup
                             variant="text"
@@ -205,16 +189,15 @@ function App() {
                             style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}
                         >
                             <ToggleButtonGroup
-                                value={filter}
+                                value={taskStatus} // Renamed filter to taskStatus
                                 exclusive
-                                onChange={(event, newFilter) => setFilter(newFilter)}
+                                onChange={(event, newStatus) => setTaskStatus(newStatus)} // Renamed filter to taskStatus
                             >
                                 <ToggleButton value="all">All</ToggleButton>
                                 <ToggleButton value="active">Active</ToggleButton>
                                 <ToggleButton value="completed">Completed</ToggleButton>
                             </ToggleButtonGroup>
                         </ButtonGroup>
-                        {/* Task List */}
                         {itemJsonArray.length === 0 ? (
                             <Alert severity="info" style={{ marginTop: '1rem' }}>
                                 No items added yet.
@@ -224,7 +207,7 @@ function App() {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            <TableCell>SNo</TableCell>
+                                            <TableCell>Sr. No</TableCell>
                                             <TableCell>Item Title</TableCell>
                                             <TableCell>Item Description</TableCell>
                                             <TableCell>Completed</TableCell>
